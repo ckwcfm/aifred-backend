@@ -1,3 +1,19 @@
+/**
+ * Initializes and starts the Express server.
+ *
+ * This function performs the following tasks:
+ * - Loads environment variables from a `.env` file.
+ * - Starts the server configurations.
+ * - Sets up middleware for JSON and URL-encoded request bodies.
+ * - Defines a root route that sends a welcome message.
+ * - Mounts the API routes under the `/api` path.
+ * - Mounts the error handling routes.
+ * - Starts the server and listens on the specified port.
+ *
+ * @async
+ * @function startServer
+ * @returns {Promise<void>} A promise that resolves when the server has started successfully.
+ */
 import express, { Request, Response, Application } from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
