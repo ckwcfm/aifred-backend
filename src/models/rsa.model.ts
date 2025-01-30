@@ -32,7 +32,7 @@ const RSASchema = new Schema<TRSA>(
       required: true,
       default: () => addDays(new Date(), 60),
     },
-  },
+  } satisfies Record<keyof Omit<TRSA, 'createdAt' | 'updatedAt'>, any>,
   {
     timestamps: true,
     toJSON: {

@@ -18,7 +18,7 @@ const UserSchema = new Schema<TUser, UserModel, TUserMethods>(
       required: true,
       select: false,
     },
-  },
+  } satisfies Record<keyof Omit<TUser, 'createdAt' | 'updatedAt' | 'id'>, any>,
   {
     timestamps: true,
     toJSON: {
@@ -50,6 +50,8 @@ UserSchema.pre('save', async function (next) {
 })
 
 UserSchema.methods.comparePassword = async function (password: string) {
+  console.log('password', password)
+  console.log('this', this.password)
   return bcrypt.compare(password, this.password)
 }
 

@@ -15,7 +15,15 @@ export async function getUserById({ id }: Pick<TUser, 'id'>) {
   return user
 }
 
-export async function getUserByEmail({ email }: Pick<TUser, 'email'>) {
-  const user = await User.findOne({ email })
+type TGetUserByEmailOptions = {
+  selectPassword?: boolean
+}
+export async function getUserByEmail(
+  { email }: Pick<TUser, 'email'>,
+  { selectPassword = false }: TGetUserByEmailOptions = {}
+) {
+  const user = await User.findOne({ email }).select(
+    selectPassword ? '+password' : ''
+  )
   return user
 }

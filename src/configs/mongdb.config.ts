@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const mongodb_url = ENV.MONGODB_URL
 export async function connectDatabase() {
   try {
-    console.log('Connecting to MongoDB...')
+    console.log('Connecting to MongoDB...', mongodb_url)
     mongoose.connection.on('connected', () => {
       console.log('Mongoose connected')
     })

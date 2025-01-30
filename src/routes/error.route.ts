@@ -14,9 +14,6 @@ export const errorRoute: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('sdfsfjsldfj')
-  console.log(err)
-
   if (err instanceof z.ZodError) {
     res.status(400).json(
       err.errors.map((error) => ({
@@ -25,6 +22,7 @@ export const errorRoute: ErrorRequestHandler = (
       }))
     )
   } else if (err instanceof ApiError) {
+    console.log(`api error: ${err}}`)
     res.status(err.status).json({
       message: err.message,
     })

@@ -2,20 +2,13 @@ import jwt, {
   GetPublicKeyOrSecret,
   JwtHeader,
   SigningKeyCallback,
-  type Algorithm,
 } from 'jsonwebtoken'
 import { z, ZodSchema } from 'zod'
 import { TRSAType } from '@/types/rsa.types'
 import { RSA } from '@/models/rsa.model'
 import { ApiError } from '@/utils/error.utils'
-import { TUser } from '@/types/user.types'
 import { getActiveKeyPairWithType } from './rsa.service'
-import { userJWTPayloadSchema } from '@/schemas/user.schemas'
-
-const expiresInOptions: Record<TRSAType, string> = {
-  userAccessToken: '1d',
-  userRefreshToken: '365d',
-} as const
+import { expiresInOptions } from '@/constants/token.constants'
 
 const getKeyWithType: (keyType: TRSAType) => GetPublicKeyOrSecret =
   (keyType) => async (header: JwtHeader, callback: SigningKeyCallback) => {
@@ -59,40 +52,6 @@ export const createToken = async <Payload extends object>(
   }
 }
 
-export const createUserToken = async (
-  user: TUser,
-  keyType: Extract<TRSAType, 'userAccessToken' | 'userRefreshToken'>
-) => {
-  try {
-    const token = await createToken(user, keyType, userJWTPayloadSchema)
-    return token
-  } catch (error) {
-    throw error
-  }
-}
-
-// export const createUserToken = async (
-//   user: TUser,
-//   keyType: Extract<TRSAType, 'userAccessToken' | 'userRefreshToken'>
-// ) => {
-//   try {
-//     const keyPair = await getActiveKeyPairWithType(keyType)
-//     if (!keyPair) {
-//       throw new Error('No key pair found')
-//     }
-//     const expiresIn = expiresInOptions[keyType]
-//     const payload = userJWTPayloadSchema.parse(user)
-//     const token = jwt.sign(payload, keyPair.privateKey, {
-//       algorithm: 'RS256',
-//       expiresIn,
-//       keyid: `${keyPair._id}`,
-//     })
-//     return token
-//   } catch (error) {
-//     throw error
-//   }
-// }
-
 export const verifyToken = async <S extends z.AnyZodObject>(
   token: string,
   keyType: TRSAType,
@@ -107,7 +66,7 @@ export const verifyToken = async <S extends z.AnyZodObject>(
       },
       (err, payload) => {
         if (err) {
-          return reject(new ApiError('BAD_REQUEST', 'Invalid token'))
+          return reject(new ApiError('UNAUTHORIZED', 'Unauthorized'))
         }
         const parsedPayload = schema.parse(payload)
         return resolve(parsedPayload)

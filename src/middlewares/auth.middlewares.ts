@@ -20,6 +20,7 @@ export const isUser = async (
     response.locals.user = user
     next()
   } catch (error) {
+    console.log('isUser error', error)
     next(error)
   }
 }

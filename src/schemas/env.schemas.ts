@@ -4,6 +4,7 @@ export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']),
   PORT: z.coerce.number().default(8000),
   MONGODB_URL: z.string().url(),
+  DB_NAME: z.string().default('test'),
   CLIENT_URL: z.string().url().default('http://localhost:3000'),
 })
 

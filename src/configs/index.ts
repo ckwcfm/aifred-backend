@@ -8,3 +8,8 @@ export async function startConfigurations(app: Application) {
   await createKeyPairIfNeed()
   configCors(app)
 }
+
+export const expiresInOptions = {
+  accessToken: 15 * 60, // 15 minutes in seconds
+  refreshToken: 30 * 24 * 60 * 60, // 30 days in seconds
+} as const
