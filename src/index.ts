@@ -30,6 +30,10 @@ const port = ENV.PORT || 8000
 
 async function startServer() {
   await startConfigurations(app)
+
+  const httpServer = createServer(app)
+  const io = initializeSocketServer(httpServer)
+
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(cookieParser())
@@ -38,10 +42,6 @@ async function startServer() {
   })
   app.use('/api', apiRoute)
   app.use(errorRoute)
-
-  const httpServer = createServer(app)
-
-  initializeSocketServer(httpServer)
 
   httpServer.listen(port, () => {
     console.log(`Server is Fire at http://localhost:${port}`)
